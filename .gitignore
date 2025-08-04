@@ -9,15 +9,26 @@
 
 # Planning and documentation files
 /planning_archive/
-*.md
-README*
 docs/
 notes/
+
+# Exclude most markdown files but allow specific ones
+*.md
+!INSTALLATION.md
+!API_SETUP.md
+!USAGE_GUIDE.md
+!README.md
 
 # Archive files
 *.zip
 *.tar.gz
 *.rar
+
+# Virtual Environment
+venv/
+env/
+ENV/
+.venv/
 
 # Python cache
 __pycache__/
