@@ -70,6 +70,11 @@ outputs/
 extracted/
 results/
 temp/
+debug_output/
+
+# Data directories (PDFs and other large files)
+data/
+*.pdf
 
 # Logs
 *.log
