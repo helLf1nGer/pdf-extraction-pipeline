@@ -53,9 +53,13 @@ class ExtractionPromptTemplate:
 <instructions>
   1. Extract ALL issues/findings from the report, including:
      - Major defects and safety concerns
-     - Minor repairs and maintenance items
+     - Minor repairs and maintenance items  
      - Recommendations for further evaluation
      - System component conditions and observations
+     - General maintenance recommendations (e.g., annual service programs)
+     - Discretionary improvements and upgrades
+     - Items mentioned in "Overview" or summary sections
+     - Any statement that suggests action should be taken
   
   2. For each issue, extract the following fields:
      - issue_name: Clear, concise name/title of the issue
@@ -72,6 +76,9 @@ class ExtractionPromptTemplate:
      - Include priority/severity indicators if present in the original text
      - Group related sub-issues under appropriate main categories
      - Extract both immediate concerns and discretionary recommendations
+     - Look for phrases like "recommended", "should be", "needs to", "requires", "annual maintenance"
+     - Include items with timeframes like "Immediate", "As soon as possible", "Discretionary", "Before use"
+     - Don't miss overview statements that recommend ongoing programs or evaluations
   
   4. Quality requirements:
      - Ensure no duplicate issues

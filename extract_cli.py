@@ -85,7 +85,7 @@ async def extract_single(args):
     
     # Validate setup if not in mock mode
     if not args.mock:
-        validation = pipeline.validate_setup()
+        validation = await pipeline.validate_setup()
         if not validation['overall_status']:
             print("[ERROR] Pipeline validation failed!")
             for error in validation['errors']:
@@ -152,7 +152,7 @@ async def extract_batch(args):
     
     # Validate setup if not in mock mode
     if not args.mock:
-        validation = pipeline.validate_setup()
+        validation = await pipeline.validate_setup()
         if not validation['overall_status']:
             print("[ERROR] Pipeline validation failed!")
             for error in validation['errors']:

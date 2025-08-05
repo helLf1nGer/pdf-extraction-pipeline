@@ -22,7 +22,6 @@ from .pdf_parser import LlamaParseIntegration, PDFParsingError
 from .enhanced_validation_router import EnhancedValidationRouter, EnhancedValidationRouterError
 from .gemini_extractor import GeminiExtractor, GeminiExtractionError
 from .claude_extractor import ClaudeExtractor, ClaudeExtractionError
-from .qwen_extractor import QwenExtractor, QwenExtractionError
 from .mock_services import MockExtractionPipeline
 
 logger = logging.getLogger(__name__)

@@ -71,6 +71,20 @@ class LlamaParseIntegration:
             raise ValueError("LlamaParse API key not found. Set LLAMA_PARSE_API_KEY environment variable.")
         
         # Initialize parser with optimal settings for inspection reports
+        # Use more specific parsing instructions to avoid safety filter issues
+        self.enhanced_parsing_instruction = """
+        This is a professional home inspection report containing technical information about property conditions.
+        Please extract ALL text content from every page including:
+        - Issue descriptions and recommendations
+        - Technical specifications and conditions
+        - Tables with data and measurements
+        - Location information and task descriptions
+        - All narrative text and lists
+        - Section headers and titles
+        
+        Do not skip any pages or content. This is a legitimate document analysis task.
+        """
+        
         try:
             self.parser = LlamaParse(
                 api_key=self.api_key,
@@ -80,23 +94,27 @@ class LlamaParseIntegration:
                 num_workers=1,  # Conservative for API limits
                 show_progress=True,
                 check_interval=2,  # Check job status every 2 seconds
-                max_timeout=120,  # 2 minute timeout per PDF
-                parsing_instruction="Extract ALL content from every page of the PDF including tables, forms, lists, and all text. Do not skip any pages or content.",
+                max_timeout=180,  # Increased timeout for better processing
+                parsing_instruction=self.enhanced_parsing_instruction.strip(),
                 skip_diagonal_text=False,  # Include all text orientations
-                page_separator="\n\n--- PAGE BREAK ---\n\n"  # Clear page separation
+                page_separator="\n\n--- PAGE BREAK ---\n\n",  # Clear page separation
+                disable_image_extraction=False,  # Keep images
+                premium_mode=True  # Use premium features if available
             )
         except Exception as e:
-            logger.warning(f"Failed to initialize with full options: {e}")
-            # Try with minimal options but still include parsing instruction
+            logger.warning(f"Failed to initialize with premium options: {e}")
+            # Try with standard options but enhanced instructions
             try:
                 self.parser = LlamaParse(
                     api_key=self.api_key,
                     result_type="markdown",
-                    parsing_instruction="Extract ALL content from every page of the PDF."
+                    parsing_instruction=self.enhanced_parsing_instruction.strip(),
+                    verbose=True
                 )
-            except:
-                # Final fallback
-                self.parser = LlamaParse(api_key=self.api_key)
+            except Exception as e2:
+                logger.warning(f"Failed to initialize with enhanced instruction: {e2}")
+                # Final fallback with minimal configuration
+                self.parser = LlamaParse(api_key=self.api_key, result_type="markdown")
         
         logger.info("LlamaParse integration initialized successfully")
     
@@ -136,23 +154,63 @@ class LlamaParseIntegration:
                 
                 # Extract content from all documents (may be multiple if pages are split)
                 markdown_parts = []
+                failed_documents = 0
+                total_documents = len(documents)
+                
                 for i, document in enumerate(documents):
                     if hasattr(document, 'text') and document.text:
-                        if len(documents) > 1:
-                            markdown_parts.append(f"\n\n--- DOCUMENT {i+1} ---\n\n{document.text}")
+                        doc_text = document.text.strip()
+                        
+                        # Check if this document failed extraction
+                        if "I'm sorry, but I can't assist with that." in doc_text:
+                            failed_documents += 1
+                            logger.warning(f"Document {i+1} failed extraction (safety filter or parsing issue)")
                         else:
-                            markdown_parts.append(document.text)
+                            if len(documents) > 1:
+                                markdown_parts.append(f"\n\n--- DOCUMENT {i+1} ---\n\n{doc_text}")
+                            else:
+                                markdown_parts.append(doc_text)
                 
                 markdown_content = "".join(markdown_parts)
                 
+                # Check if too many documents failed or content is inadequate
+                failure_rate = failed_documents / total_documents if total_documents > 0 else 1.0
+                content_too_short = len(markdown_content.strip()) < 100
+                
+                logger.info(f"LlamaParse results: {failed_documents}/{total_documents} documents failed (failure rate: {failure_rate:.1%})")
+                
+                # If failure rate is high or content is inadequate, try PyMuPDF fallback
+                if failure_rate > 0.4 or content_too_short:  # If >40% failed or content too short
+                    logger.warning(f"LlamaParse extraction inadequate (failure rate: {failure_rate:.1%}, content length: {len(markdown_content)})")
+                    
+                    if HAS_PYMUPDF:
+                        logger.info("Attempting PyMuPDF fallback for text extraction...")
+                        pymupdf_text = self._extract_text_with_pymupdf(pdf_path)
+                        
+                        if pymupdf_text and len(pymupdf_text.strip()) > len(markdown_content.strip()):
+                            logger.info(f"PyMuPDF extracted more content ({len(pymupdf_text)} vs {len(markdown_content)} chars), using fallback")
+                            markdown_content = pymupdf_text
+                        elif not markdown_content.strip() and pymupdf_text:
+                            logger.info("LlamaParse extracted no usable content, using PyMuPDF fallback")
+                            markdown_content = pymupdf_text
+                        else:
+                            logger.info("PyMuPDF fallback did not improve content, keeping LlamaParse results")
+                    else:
+                        logger.warning("PyMuPDF not available for fallback")
+                
                 if not markdown_content or len(markdown_content.strip()) < 100:
-                    raise PDFParsingError("Extracted content is too short or empty")
+                    raise PDFParsingError("Extracted content is too short or empty after all attempts")
                 
                 # Step 2: Extract actual image files using get_image_documents()
                 logger.info(f"Extracting images from {pdf_path.name}...")
                 image_file_paths = await self._extract_images_from_result(pdf_path)
                 
                 processing_time = time.time() - start_time
+                
+                # Determine which extraction method was primarily used
+                extraction_method = "llamaparse"
+                if failure_rate > 0.4 and HAS_PYMUPDF:
+                    extraction_method = "hybrid" if failure_rate < 1.0 else "pymupdf"
                 
                 result = {
                     'success': True,
@@ -162,7 +220,11 @@ class LlamaParseIntegration:
                     'processing_time': processing_time,
                     'source_pdf': str(pdf_path),
                     'content_length': len(markdown_content),
-                    'attempt_count': attempt + 1
+                    'attempt_count': attempt + 1,
+                    'extraction_method': extraction_method,
+                    'llamaparse_failure_rate': failure_rate,
+                    'total_documents': total_documents,
+                    'failed_documents': failed_documents
                 }
                 
                 logger.info(f"Successfully parsed {pdf_path.name} in {processing_time:.2f}s")
@@ -345,6 +407,73 @@ class LlamaParseIntegration:
                     logger.error(f"PyMuPDF fallback also failed: {pymupdf_error}")
         
         return image_file_paths
+    
+    def _extract_text_with_pymupdf(self, pdf_path: Path) -> str:
+        """
+        Fallback text extraction using PyMuPDF when LlamaParse fails.
+        
+        Args:
+            pdf_path: Path to the original PDF file
+            
+        Returns:
+            Extracted text content formatted as markdown
+        """
+        if not HAS_PYMUPDF:
+            logger.warning("PyMuPDF not available for fallback text extraction")
+            return ""
+        
+        try:
+            logger.info(f"Using PyMuPDF fallback for text extraction: {pdf_path.name}")
+            
+            # Open PDF with PyMuPDF
+            doc = fitz.open(str(pdf_path))
+            
+            text_parts = []
+            for page_num in range(len(doc)):
+                page = doc[page_num]
+                
+                # Extract text from the page
+                page_text = page.get_text()
+                
+                if page_text.strip():
+                    # Format as markdown with page separators
+                    formatted_text = f"\n\n--- PAGE {page_num + 1} ---\n\n{page_text.strip()}"
+                    text_parts.append(formatted_text)
+                else:
+                    # Try alternative text extraction methods for difficult pages
+                    try:
+                        # Try with layout preservation
+                        blocks = page.get_text("dict")
+                        page_text_blocks = []
+                        
+                        for block in blocks.get("blocks", []):
+                            if "lines" in block:
+                                for line in block["lines"]:
+                                    for span in line.get("spans", []):
+                                        text = span.get("text", "").strip()
+                                        if text:
+                                            page_text_blocks.append(text)
+                        
+                        if page_text_blocks:
+                            block_text = " ".join(page_text_blocks)
+                            formatted_text = f"\n\n--- PAGE {page_num + 1} ---\n\n{block_text}"
+                            text_parts.append(formatted_text)
+                        else:
+                            logger.warning(f"Page {page_num + 1} appears to have no extractable text")
+                            
+                    except Exception as e:
+                        logger.warning(f"Alternative text extraction failed for page {page_num + 1}: {e}")
+            
+            doc.close()
+            
+            full_text = "".join(text_parts)
+            logger.info(f"PyMuPDF extracted {len(full_text)} characters from {pdf_path.name}")
+            
+            return full_text
+            
+        except Exception as e:
+            logger.error(f"PyMuPDF text extraction failed for {pdf_path.name}: {e}")
+            return ""
     
     def _extract_images_with_pymupdf(self, pdf_path: Path) -> List[str]:
         """
