@@ -26,6 +26,15 @@ except ImportError:
     ResultType = None
     logging.warning("LlamaParse not available. Install with: pip install llama-parse")
 
+# Import PyMuPDF for fallback image extraction
+try:
+    import fitz  # PyMuPDF
+    HAS_PYMUPDF = True
+except ImportError:
+    HAS_PYMUPDF = False
+    fitz = None
+    logging.warning("PyMuPDF not available. Install with: pip install PyMuPDF")
+
 from dotenv import load_dotenv
 
 # Load environment variables
@@ -93,14 +102,14 @@ class LlamaParseIntegration:
     
     async def parse_pdf_async(self, pdf_path: str, max_retries: int = 3) -> Dict[str, Any]:
         """
-        Parse a PDF file asynchronously and return structured markdown content.
+        Parse a PDF file asynchronously and return structured markdown content with extracted images.
         
         Args:
             pdf_path: Path to the PDF file
             max_retries: Maximum number of retry attempts
             
         Returns:
-            Dictionary containing parsed content and metadata
+            Dictionary containing parsed content and metadata including actual image file paths
             
         Raises:
             PDFParsingError: If parsing fails after all retries
@@ -119,66 +128,37 @@ class LlamaParseIntegration:
             try:
                 logger.info(f"Parsing PDF (attempt {attempt + 1}/{max_retries + 1}): {pdf_path.name}")
                 
-                # Try to parse using get_json_result for complete page extraction
-                markdown_content = ""
-                images = []
+                # Parse the PDF file using standard method first
+                documents = await self.parser.aload_data([str(pdf_path)])
                 
-                try:
-                    # First try get_json_result method for complete extraction
-                    json_data = await self.parser.aget_json_result(str(pdf_path))
-                    
-                    if json_data:
-                        # Combine all pages into markdown
-                        all_pages = []
-                        for doc_json in json_data:
-                            if 'pages' in doc_json:
-                                for page_data in doc_json['pages']:
-                                    page_num = page_data.get('page', '?')
-                                    page_text = page_data.get('text', '')
-                                    if page_text:
-                                        all_pages.append(f"\n\n--- PAGE {page_num} ---\n\n{page_text}")
-                                    
-                                    # Collect images from pages
-                                    if 'images' in page_data:
-                                        images.extend(page_data['images'])
-                        
-                        markdown_content = "".join(all_pages)
-                    
-                except (AttributeError, Exception) as e:
-                    # Fallback to load_data if get_json_result is not available
-                    logger.info(f"get_json_result not available or failed: {e}. Falling back to load_data.")
-                    
-                    # Parse the PDF file using standard method
-                    documents = await self.parser.aload_data([str(pdf_path)])
-                    
-                    if not documents:
-                        raise PDFParsingError("No documents returned from LlamaParse")
-                    
-                    # Extract content from all documents (may be multiple if pages are split)
-                    markdown_parts = []
-                    for i, document in enumerate(documents):
-                        if hasattr(document, 'text') and document.text:
-                            if len(documents) > 1:
-                                markdown_parts.append(f"\n\n--- DOCUMENT {i+1} ---\n\n{document.text}")
-                            else:
-                                markdown_parts.append(document.text)
-                        
-                        # Extract images if available
-                        if hasattr(document, 'metadata') and document.metadata:
-                            doc_images = document.metadata.get('images', [])
-                            images.extend(doc_images)
-                    
-                    markdown_content = "".join(markdown_parts)
+                if not documents:
+                    raise PDFParsingError("No documents returned from LlamaParse")
+                
+                # Extract content from all documents (may be multiple if pages are split)
+                markdown_parts = []
+                for i, document in enumerate(documents):
+                    if hasattr(document, 'text') and document.text:
+                        if len(documents) > 1:
+                            markdown_parts.append(f"\n\n--- DOCUMENT {i+1} ---\n\n{document.text}")
+                        else:
+                            markdown_parts.append(document.text)
+                
+                markdown_content = "".join(markdown_parts)
                 
                 if not markdown_content or len(markdown_content.strip()) < 100:
                     raise PDFParsingError("Extracted content is too short or empty")
+                
+                # Step 2: Extract actual image files using get_image_documents()
+                logger.info(f"Extracting images from {pdf_path.name}...")
+                image_file_paths = await self._extract_images_from_result(pdf_path)
                 
                 processing_time = time.time() - start_time
                 
                 result = {
                     'success': True,
                     'markdown_content': markdown_content,
-                    'images': images,
+                    'images': image_file_paths,  # Now contains actual file paths
+                    'image_count': len(image_file_paths),
                     'processing_time': processing_time,
                     'source_pdf': str(pdf_path),
                     'content_length': len(markdown_content),
@@ -186,7 +166,7 @@ class LlamaParseIntegration:
                 }
                 
                 logger.info(f"Successfully parsed {pdf_path.name} in {processing_time:.2f}s")
-                logger.info(f"Extracted {len(markdown_content)} characters from PDF")
+                logger.info(f"Extracted {len(markdown_content)} characters and {len(image_file_paths)} images from PDF")
                 return result
                 
             except Exception as e:
@@ -208,16 +188,269 @@ class LlamaParseIntegration:
             f"Last error: {str(last_error)}"
         )
     
+    async def _extract_images_from_result(self, pdf_path: Path) -> List[str]:
+        """
+        Extract images from PDF using LlamaParse's aget_images method.
+        
+        Args:
+            pdf_path: Path to the original PDF file
+            
+        Returns:
+            List of image file paths relative to the outputs/images directory
+        """
+        image_file_paths = []
+        
+        try:
+            # Create image output directory
+            pdf_name = pdf_path.stem
+            image_dir = Path("./outputs/images") / pdf_name
+            image_dir.mkdir(parents=True, exist_ok=True)
+            
+            logger.info(f"Created image directory: {image_dir}")
+            
+            # Use aget_images() method to extract images
+            try:
+                logger.info(f"Attempting to extract images using aget_images() for {pdf_path.name}")
+                
+                # Create a new parser instance specifically for image extraction
+                image_parser = LlamaParse(
+                    api_key=self.api_key,
+                    result_type="markdown",
+                    verbose=True,
+                    disable_image_extraction=False,  # Ensure image extraction is enabled
+                    premium_mode=True  # Enable premium features for better image extraction
+                )
+                
+                # Extract images using the async method
+                image_results = await image_parser.aget_images([str(pdf_path)], download_path=str(image_dir))
+                
+                logger.info(f"aget_images() returned {len(image_results) if image_results else 0} image results")
+                
+                # Process the extracted images
+                if image_results:
+                    for doc_idx, doc_images in enumerate(image_results):
+                        # doc_images should be a list of image documents/data
+                        if isinstance(doc_images, list):
+                            for img_idx, image_data in enumerate(doc_images):
+                                try:
+                                    # Create filename for the image
+                                    image_filename = f"image_{img_idx+1:03d}.png"
+                                    image_path = image_dir / image_filename
+                                    
+                                    # Save the image data
+                                    if hasattr(image_data, 'image') or hasattr(image_data, 'data'):
+                                        # Try to get actual image data
+                                        img_content = getattr(image_data, 'image', None) or getattr(image_data, 'data', None)
+                                        if img_content:
+                                            if isinstance(img_content, bytes):
+                                                with open(image_path, 'wb') as f:
+                                                    f.write(img_content)
+                                            elif isinstance(img_content, str):
+                                                # Might be base64 encoded
+                                                import base64
+                                                try:
+                                                    img_bytes = base64.b64decode(img_content)
+                                                    with open(image_path, 'wb') as f:
+                                                        f.write(img_bytes)
+                                                except:
+                                                    # If not base64, skip this image
+                                                    logger.warning(f"Could not decode image data for {image_filename}")
+                                                    continue
+                                            
+                                            # Verify file was saved and add to results
+                                            if image_path.exists() and image_path.stat().st_size > 0:
+                                                relative_path = f"outputs/images/{pdf_name}/{image_filename}"
+                                                image_file_paths.append(relative_path)
+                                                logger.debug(f"Extracted image: {relative_path}")
+                                    
+                                    # Alternative: check if image_data has text or other useful content
+                                    elif hasattr(image_data, 'text') and image_data.text:
+                                        # This might be a reference or metadata about an image
+                                        logger.debug(f"Found image metadata: {image_data.text[:100]}...")
+                                        
+                                except Exception as img_error:
+                                    logger.warning(f"Failed to process image {img_idx+1}: {img_error}")
+                                    continue
+                        
+                        # Alternative: image_results might be in a different format
+                        elif hasattr(doc_images, 'images') or hasattr(doc_images, 'data'):
+                            logger.info("Found alternative image format")
+                            # Handle different result structure if needed
+                
+                logger.info(f"Successfully extracted {len(image_file_paths)} images using aget_images()")
+                
+                # If LlamaParse returned no images, try PyMuPDF fallback
+                if not image_file_paths and HAS_PYMUPDF:
+                    logger.info("LlamaParse returned 0 images, trying PyMuPDF fallback...")
+                    pymupdf_images = self._extract_images_with_pymupdf(pdf_path)
+                    if pymupdf_images:
+                        image_file_paths = pymupdf_images
+                        logger.info(f"PyMuPDF fallback extracted {len(image_file_paths)} images")
+                
+            except Exception as e:
+                logger.warning(f"aget_images() failed: {e}")
+                logger.info("Trying alternative approaches...")
+                
+                # Fallback 1: Try synchronous version
+                try:
+                    logger.info("Trying synchronous get_images()...")
+                    
+                    image_parser = LlamaParse(
+                        api_key=self.api_key,
+                        result_type="markdown",
+                        disable_image_extraction=False
+                    )
+                    
+                    sync_image_results = image_parser.get_images([str(pdf_path)], download_path=str(image_dir))
+                    logger.info(f"get_images() returned {len(sync_image_results) if sync_image_results else 0} results")
+                    
+                    # Process synchronous results similar to async
+                    # (same processing logic as above)
+                    
+                except Exception as sync_error:
+                    logger.warning(f"Synchronous get_images() also failed: {sync_error}")
+                
+                # Fallback 2: Check if files were saved in the directory anyway
+                try:
+                    # Sometimes LlamaParse saves images even if the method call has issues
+                    saved_files = list(image_dir.glob("*.*"))
+                    for saved_file in saved_files:
+                        if saved_file.is_file() and saved_file.suffix.lower() in ['.png', '.jpg', '.jpeg', '.gif', '.bmp']:
+                            relative_path = f"outputs/images/{pdf_name}/{saved_file.name}"
+                            image_file_paths.append(relative_path)
+                            logger.debug(f"Found saved image file: {relative_path}")
+                    
+                    if image_file_paths:
+                        logger.info(f"Found {len(image_file_paths)} saved image files in directory")
+                    else:
+                        logger.info(f"No image files found in {image_dir}")
+                        
+                except Exception as fallback_error:
+                    logger.warning(f"Fallback image detection failed: {fallback_error}")
+                
+                # Final fallback: Use PyMuPDF if available
+                if not image_file_paths and HAS_PYMUPDF:
+                    logger.info("Trying PyMuPDF as final fallback for image extraction...")
+                    image_file_paths = self._extract_images_with_pymupdf(pdf_path)
+            
+        except Exception as e:
+            logger.error(f"Image extraction failed for {pdf_path.name}: {e}")
+            
+            # Ultimate fallback: Use PyMuPDF if available
+            if not image_file_paths and HAS_PYMUPDF:
+                logger.info("Trying PyMuPDF as ultimate fallback after LlamaParse failure...")
+                try:
+                    image_file_paths = self._extract_images_with_pymupdf(pdf_path)
+                except Exception as pymupdf_error:
+                    logger.error(f"PyMuPDF fallback also failed: {pymupdf_error}")
+        
+        return image_file_paths
+    
+    def _extract_images_with_pymupdf(self, pdf_path: Path) -> List[str]:
+        """
+        Fallback image extraction using PyMuPDF when LlamaParse fails.
+        
+        Args:
+            pdf_path: Path to the original PDF file
+            
+        Returns:
+            List of image file paths relative to the outputs/images directory
+        """
+        if not HAS_PYMUPDF:
+            logger.warning("PyMuPDF not available for fallback image extraction")
+            return []
+        
+        image_file_paths = []
+        
+        try:
+            # Create image output directory
+            pdf_name = pdf_path.stem
+            image_dir = Path("./outputs/images") / pdf_name
+            image_dir.mkdir(parents=True, exist_ok=True)
+            
+            logger.info(f"Using PyMuPDF fallback for image extraction: {pdf_path.name}")
+            
+            # Open PDF with PyMuPDF
+            doc = fitz.open(str(pdf_path))
+            
+            total_images = 0
+            for page_num in range(len(doc)):
+                page = doc[page_num]
+                image_list = page.get_images()
+                
+                for img_index, img in enumerate(image_list):
+                    try:
+                        # Get image data
+                        xref = img[0]  # Image reference number
+                        pix = fitz.Pixmap(doc, xref)
+                        
+                        # Skip images that are likely UI elements or decorations
+                        # 1. Very small images (icons, buttons)
+                        if pix.width < 50 or pix.height < 50:
+                            pix = None
+                            continue
+                        
+                        # 2. Extreme aspect ratios (navigation bars like 74x24)
+                        aspect_ratio = pix.width / pix.height if pix.height > 0 else 0
+                        if aspect_ratio > 8 or aspect_ratio < 0.125:  # Very wide bars or very tall dividers
+                            pix = None
+                            continue
+                        
+                        # 3. Common UI element sizes (specific filtering)
+                        if (pix.width == 74 and pix.height == 24) or (pix.width < 80 and pix.height < 30):
+                            pix = None
+                            continue
+                        
+                        # Create filename
+                        image_filename = f"page_{page_num+1:02d}_image_{img_index+1:03d}.png"
+                        image_path = image_dir / image_filename
+                        
+                        # Save image
+                        if pix.n - pix.alpha < 4:  # GRAY or RGB
+                            pix.save(str(image_path))
+                        else:  # CMYK: convert to RGB first
+                            pix_rgb = fitz.Pixmap(fitz.csRGB, pix)
+                            pix_rgb.save(str(image_path))
+                            pix_rgb = None
+                        
+                        pix = None
+                        
+                        # Verify file was saved and check size
+                        if image_path.exists():
+                            file_size = image_path.stat().st_size
+                            
+                            # Skip very small files (likely UI elements)
+                            if file_size < 2000:  # Less than 2KB - definitely UI elements
+                                image_path.unlink()  # Delete the file
+                                logger.debug(f"Skipped tiny image ({file_size} bytes): {image_filename}")
+                            else:
+                                relative_path = f"outputs/images/{pdf_name}/{image_filename}"
+                                image_file_paths.append(relative_path)
+                                total_images += 1
+                                logger.debug(f"Extracted image ({file_size} bytes): {relative_path}")
+                    
+                    except Exception as img_error:
+                        logger.warning(f"Failed to extract image {img_index+1} from page {page_num+1}: {img_error}")
+                        continue
+            
+            doc.close()
+            logger.info(f"PyMuPDF extracted {total_images} images from {pdf_path.name}")
+            
+        except Exception as e:
+            logger.error(f"PyMuPDF image extraction failed for {pdf_path.name}: {e}")
+        
+        return image_file_paths
+    
     def parse_pdf_sync(self, pdf_path: str, max_retries: int = 3) -> Dict[str, Any]:
         """
-        Synchronous wrapper for PDF parsing.
+        Synchronous wrapper for PDF parsing with image extraction.
         
         Args:
             pdf_path: Path to the PDF file
             max_retries: Maximum number of retry attempts
             
         Returns:
-            Dictionary containing parsed content and metadata
+            Dictionary containing parsed content and metadata including image file paths
         """
         try:
             # Run the async function in a new event loop
@@ -235,7 +468,8 @@ class LlamaParseIntegration:
                 'source_pdf': pdf_path,
                 'processing_time': 0,
                 'markdown_content': '',
-                'images': []
+                'images': [],
+                'image_count': 0
             }
     
     async def parse_multiple_pdfs_async(self, pdf_paths: List[str], max_concurrent: int = 2) -> List[Dict[str, Any]]:
@@ -270,7 +504,8 @@ class LlamaParseIntegration:
                     'source_pdf': pdf_paths[i],
                     'processing_time': 0,
                     'markdown_content': '',
-                    'images': []
+                    'images': [],
+                    'image_count': 0
                 })
             else:
                 processed_results.append(result)
