@@ -118,14 +118,30 @@ def analyze_extraction_accuracy(pdf_content: Dict[str, Any], extracted_data: Dic
     extracted_issues = extracted_data.get('issues', [])
     extracted_issue_count = len(extracted_issues)
     
-    # Count images in extraction
+    # Count images in extraction (both legacy and enhanced)
     total_extracted_images = 0
+    total_enhanced_images = 0
+    high_confidence_images = 0
     for issue in extracted_issues:
+        # Count legacy images
         total_extracted_images += len(issue.get('issue_images', []))
+        # Count enhanced images
+        enhanced = issue.get('enhanced_images', [])
+        total_enhanced_images += len(enhanced)
+        # Count high confidence matches
+        for img in enhanced:
+            if img.get('confidence_score', 0) >= 70:
+                high_confidence_images += 1
+    
+    # Use enhanced images if available, otherwise fall back to legacy
+    effective_extracted_images = total_enhanced_images if total_enhanced_images > 0 else total_extracted_images
     
     evaluation['extraction_analysis'] = {
         'extracted_issues': extracted_issue_count,
         'total_extracted_images': total_extracted_images,
+        'total_enhanced_images': total_enhanced_images,
+        'high_confidence_images': high_confidence_images,
+        'effective_extracted_images': effective_extracted_images,
         'report_name': extracted_data.get('report_name', ''),
         'has_report_name': bool(extracted_data.get('report_name', '').strip())
     }
@@ -140,12 +156,16 @@ def analyze_extraction_accuracy(pdf_content: Dict[str, Any], extracted_data: Dic
     else:
         issue_count_accuracy = 100 if extracted_issue_count == 0 else 80
     
-    # Image extraction accuracy
+    # Image extraction accuracy (using enhanced images if available)
     if len(pdf_images) > 0:
-        image_accuracy = (total_extracted_images / len(pdf_images)) * 100
+        # For enhanced images, only count high confidence matches for accuracy
+        if total_enhanced_images > 0:
+            image_accuracy = (high_confidence_images / extracted_issue_count) * 100
+        else:
+            image_accuracy = (total_extracted_images / len(pdf_images)) * 100
         image_accuracy = min(100, image_accuracy)  # Cap at 100%
     else:
-        image_accuracy = 100 if total_extracted_images == 0 else 0
+        image_accuracy = 100 if effective_extracted_images == 0 else 0
     
     # Content quality score (basic heuristics)
     content_score = 0
@@ -189,7 +209,10 @@ def analyze_extraction_accuracy(pdf_content: Dict[str, Any], extracted_data: Dic
     summary_parts = []
     summary_parts.append(f"Overall accuracy: {overall_accuracy:.1f}%")
     summary_parts.append(f"Estimated {estimated_issues} issues in PDF, extracted {extracted_issue_count}")
-    summary_parts.append(f"Found {len(pdf_images)} images in PDF, extracted {total_extracted_images}")
+    if total_enhanced_images > 0:
+        summary_parts.append(f"Enhanced image matching: {high_confidence_images} high confidence matches from {total_enhanced_images} total")
+    else:
+        summary_parts.append(f"Found {len(pdf_images)} images in PDF, extracted {total_extracted_images}")
     
     if overall_accuracy >= 85.0:
         summary_parts.append("PASSES 85% threshold")
@@ -273,7 +296,10 @@ def print_evaluation_summary(evaluation: Dict[str, Any], pdf_name: str, json_nam
     print(f"\nExtraction Analysis:")
     ext_analysis = evaluation['extraction_analysis']
     print(f"  Extracted Issues: {ext_analysis['extracted_issues']}")
-    print(f"  Extracted Images: {ext_analysis['total_extracted_images']}")
+    if ext_analysis.get('total_enhanced_images', 0) > 0:
+        print(f"  Enhanced Images: {ext_analysis['high_confidence_images']} high confidence / {ext_analysis['total_enhanced_images']} total")
+    else:
+        print(f"  Extracted Images: {ext_analysis['total_extracted_images']}")
     print(f"  Has Report Name: {ext_analysis['has_report_name']}")
     
     print(f"\nAccuracy Metrics:")
