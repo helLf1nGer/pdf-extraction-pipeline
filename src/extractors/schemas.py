@@ -5,8 +5,67 @@ This module defines the data structures for extracting structured data
 from home inspection PDFs using LlamaParse and AI models.
 """
 
-from typing import List, Optional
+from typing import List, Optional, Dict, Any
 from pydantic import BaseModel, Field, validator
+
+
+class ImageLocation(BaseModel):
+    """Location information for where an image appears in the document."""
+    
+    page_number: int = Field(
+        ...,
+        description="Page number where the image appears",
+        ge=1
+    )
+    
+    location_description: Optional[str] = Field(
+        None,
+        description="Description of where on the page the image appears (e.g., 'top-right', 'center', 'bottom section')",
+        max_length=200
+    )
+    
+    section_context: Optional[str] = Field(
+        None,
+        description="Context about what section or part of the report this image relates to",
+        max_length=300
+    )
+
+
+class ImageMetadata(BaseModel):
+    """Enhanced metadata for image associations with confidence scoring."""
+    
+    image_path: str = Field(
+        ..., 
+        description="Path to the image file"
+    )
+    
+    expected_location: Optional[ImageLocation] = Field(
+        None,
+        description="Expected location information provided by the model"
+    )
+    
+    actual_page: Optional[int] = Field(
+        None,
+        description="Actual page number where this image was extracted",
+        ge=1
+    )
+    
+    confidence_score: Optional[float] = Field(
+        None,
+        description="Confidence score (0-100) for this image association",
+        ge=0,
+        le=100
+    )
+    
+    matching_method: Optional[str] = Field(
+        None,
+        description="Method used to match this image (location_based, proximity, context, etc.)"
+    )
+    
+    location_match: Optional[bool] = Field(
+        None,
+        description="Whether the expected location matches the actual extracted image location"
+    )
 
 
 class InspectionIssue(BaseModel):
@@ -54,7 +113,17 @@ class InspectionIssue(BaseModel):
     
     issue_images: List[str] = Field(
         default_factory=list,
-        description="List of image references/filenames associated with this issue"
+        description="List of image references/filenames associated with this issue (legacy format)"
+    )
+    
+    enhanced_images: List[ImageMetadata] = Field(
+        default_factory=list,
+        description="Enhanced image metadata with confidence scores and location matching"
+    )
+    
+    expected_image_locations: List[ImageLocation] = Field(
+        default_factory=list,
+        description="Model-provided locations where images for this issue should appear"
     )
     
     # Aliases for backward compatibility with enhanced validation router
@@ -62,6 +131,18 @@ class InspectionIssue(BaseModel):
     def description(self) -> str:
         """Alias for issue_description for router compatibility."""
         return self.issue_description
+    
+    @property
+    def all_image_paths(self) -> List[str]:
+        """Get all image paths from both legacy and enhanced formats."""
+        paths = list(self.issue_images)  # Legacy format
+        paths.extend([img.image_path for img in self.enhanced_images])  # Enhanced format
+        return list(set(paths))  # Remove duplicates
+    
+    def get_high_confidence_images(self, min_confidence: float = 70.0) -> List[ImageMetadata]:
+        """Get images with confidence scores above threshold."""
+        return [img for img in self.enhanced_images 
+                if img.confidence_score is not None and img.confidence_score >= min_confidence]
     
     @validator('issue_name', 'issue_type', 'issue_description', 'issue_summary', 'location')
     def strip_whitespace(cls, v):

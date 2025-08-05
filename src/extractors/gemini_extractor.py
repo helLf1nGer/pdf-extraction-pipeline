@@ -22,8 +22,9 @@ except ImportError:
     HarmBlockThreshold = None
     logging.warning("google.generativeai not available. Install with: pip install google-generativeai")
 
-from .schemas import HomeInspectionReport, InspectionIssue, ExtractionResult
+from .schemas import HomeInspectionReport, InspectionIssue, ExtractionResult, ImageLocation
 from .extraction_prompts import ExtractionPromptTemplate
+from .image_matcher import ImageMatcher
 
 # Load environment variables
 load_dotenv()
@@ -144,7 +145,7 @@ class GeminiExtractor:
                 extracted_data = self._parse_response(response.text)
                 
                 # Validate and convert to Pydantic models
-                report = self._create_report_model(extracted_data, source_filename)
+                report = self._create_report_model(extracted_data, source_filename, image_references)
                 
                 processing_time = time.time() - start_time
                 
@@ -233,21 +234,51 @@ class GeminiExtractor:
         except ValueError as e:
             raise GeminiExtractionError(f"Response validation error: {str(e)}")
     
-    def _create_report_model(self, data: Dict[str, Any], source_filename: Optional[str]) -> HomeInspectionReport:
-        """Convert extracted data to Pydantic model with validation."""
+    def _create_report_model(
+        self, 
+        data: Dict[str, Any], 
+        source_filename: Optional[str],
+        image_references: Optional[List[str]] = None
+    ) -> HomeInspectionReport:
+        """Convert extracted data to Pydantic model with validation and enhanced image matching."""
         try:
             # Convert issues to Pydantic models
             issues = []
             for issue_data in data.get('issues', []):
+                # Parse expected image locations
+                expected_locations = []
+                for loc_data in issue_data.get('expected_image_locations', []):
+                    if isinstance(loc_data, dict):
+                        location = ImageLocation(
+                            page_number=loc_data.get('page_number', 1),
+                            location_description=loc_data.get('location_description'),
+                            section_context=loc_data.get('section_context')
+                        )
+                        expected_locations.append(location)
+                
                 # Handle missing fields with defaults
                 issue = InspectionIssue(
                     issue_name=issue_data.get('issue_name', 'Unknown Issue'),
                     issue_type=issue_data.get('issue_type', 'General'),
                     issue_description=issue_data.get('issue_description', 'No description available'),
                     issue_summary=issue_data.get('issue_summary', 'No summary available'),
-                    issue_images=issue_data.get('issue_images', [])
+                    severity=issue_data.get('severity', 'medium'),
+                    location=issue_data.get('location'),
+                    issue_images=issue_data.get('issue_images', []),  # Legacy format
+                    expected_image_locations=expected_locations
                 )
                 issues.append(issue)
+            
+            # Apply enhanced image matching if image references are available
+            if image_references and any(issue.expected_image_locations for issue in issues):
+                logger.info("Applying enhanced image matching based on model-provided locations")
+                image_matcher = ImageMatcher()
+                issues = image_matcher.enhance_image_associations(issues, image_references)
+                
+                # Log matching statistics
+                stats = image_matcher.get_matching_statistics(issues)
+                logger.info(f"Enhanced image matching results: {stats['total_enhanced_matches']} matches, "
+                           f"avg confidence: {stats['average_confidence']:.1f}")
             
             # Create report model
             report = HomeInspectionReport(

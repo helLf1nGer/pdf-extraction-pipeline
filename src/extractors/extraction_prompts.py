@@ -74,11 +74,15 @@ class ExtractionPromptTemplate:
      - issue_summary: Brief 1-2 sentence summary of the issue and recommended action
      - severity: Priority level (low, medium, high) based on safety, cost, or urgency indicators
      - location: Specific location within the property where the issue was found
-     - issue_images: List of associated image references based on proximity and context
+     - issue_images: List of associated image references based on proximity and context (legacy)
+     - expected_image_locations: List of locations where images for this issue should appear
   
   3. Extraction guidelines:
      - Maintain original technical terminology and wording where possible
      - Associate images with issues based on their proximity in the document and contextual relevance
+     - For expected_image_locations, specify page number where images for this issue appear
+     - Include location descriptions like "top section", "center", "bottom area" when identifiable
+     - Provide section context for where images should appear (e.g., "electrical panel section", "basement area")
      - Include priority/severity indicators if present in the original text
      - Group related sub-issues under appropriate main categories
      - Extract both immediate concerns and discretionary recommendations
@@ -104,7 +108,14 @@ class ExtractionPromptTemplate:
       "issue_summary": "string - Brief summary with recommended action",
       "severity": "string - Priority level: low, medium, or high",
       "location": "string - Specific location where issue was found (optional)",
-      "issue_images": ["string"] - Array of associated image references
+      "issue_images": ["string"] - Array of associated image references (legacy format),
+      "expected_image_locations": [
+        {{
+          "page_number": number - Page where image should appear,
+          "location_description": "string - Where on page (top, center, bottom, etc.)",
+          "section_context": "string - What section/context this image relates to"
+        }}
+      ]
     }}
   ]
 }}
@@ -119,7 +130,19 @@ class ExtractionPromptTemplate:
       "issue_summary": "Replace outdated knob and tube wiring with modern electrical system for safety compliance.",
       "severity": "high",
       "location": "Basement",
-      "issue_images": ["electrical_basement_01.jpg", "knob_tube_wiring.jpg"]
+      "issue_images": ["electrical_basement_01.jpg", "knob_tube_wiring.jpg"],
+      "expected_image_locations": [
+        {{
+          "page_number": 8,
+          "location_description": "center section",
+          "section_context": "basement electrical panel area"
+        }},
+        {{
+          "page_number": 9,
+          "location_description": "top area",
+          "section_context": "close-up of knob and tube wiring installation"
+        }}
+      ]
     }}
   </example_issue>
 </examples>
