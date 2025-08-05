@@ -25,6 +25,8 @@ except ImportError:
 from .schemas import HomeInspectionReport, InspectionIssue, ExtractionResult, ImageLocation
 from .extraction_prompts import ExtractionPromptTemplate
 from .image_matcher import ImageMatcher
+from .json_repair import repair_json
+from .json_validator import validate_json
 
 # Load environment variables
 load_dotenv()
@@ -212,8 +214,27 @@ class GeminiExtractor:
                 cleaned_text = cleaned_text[:-3]
             cleaned_text = cleaned_text.strip()
             
-            # Parse JSON
-            data = json.loads(cleaned_text)
+            # Try normal parsing first
+            data = None
+            try:
+                data = json.loads(cleaned_text)
+            except json.JSONDecodeError as e:
+                logger.warning(f"Initial JSON parse failed: {str(e)}")
+                # Try JSON repair
+                logger.info("Attempting JSON repair...")
+                data = repair_json(cleaned_text)
+                
+                if data is None:
+                    # Try Claude validation as last resort
+                    logger.info("JSON repair failed, attempting Claude validation...")
+                    data = validate_json(cleaned_text)
+                    
+                    if data is None:
+                        raise GeminiExtractionError(f"All JSON fix attempts failed - Invalid JSON response: {str(e)}")
+                    else:
+                        logger.info("Claude JSON validation successful!")
+                else:
+                    logger.info("JSON repair successful!")
             
             # Validate required fields
             if not isinstance(data, dict):
