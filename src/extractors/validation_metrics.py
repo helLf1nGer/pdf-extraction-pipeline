@@ -488,7 +488,7 @@ class ValidationMetrics:
                 report_name=primary_result.report.report_name,
                 issues=consensus_issues,
                 source_pdf=primary_result.report.source_pdf,
-                extraction_model='consensus-qwen-gemini'
+                extraction_model=f'consensus-{primary_result.model_used}-{validator_result.model_used}'
             )
         else:
             consensus_report = None
@@ -501,7 +501,7 @@ class ValidationMetrics:
                 primary_result.processing_time or 0,
                 validator_result.processing_time or 0
             ),
-            model_used='consensus-qwen-gemini',
+            model_used=f'consensus-{primary_result.model_used}-{validator_result.model_used}',
             pdf_complexity='validated'
         )
     
