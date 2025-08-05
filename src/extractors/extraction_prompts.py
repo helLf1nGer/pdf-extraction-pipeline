@@ -51,6 +51,12 @@ class ExtractionPromptTemplate:
 </context>
 
 <instructions>
+  IMPORTANT: Always check for and include these common summary recommendations if present:
+  - "All recommendations should be addressed by qualified specialists" → Create as "Use Qualified Specialists for Repairs" (General)
+  - "Homeowners should obtain required permits before starting renovations" → Create as "Obtain Required Permits for Renovations" (General)  
+  - "Wood-burning appliances should be inspected by a WETT-certified technician" → Create as "WETT Inspection for Wood-Burning Appliances" (Safety)
+  - Annual maintenance programs → Create appropriate entries for HVAC/heating/cooling systems
+
   1. Extract ALL issues/findings from the report, including:
      - Major defects and safety concerns
      - Minor repairs and maintenance items  

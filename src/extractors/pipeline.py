@@ -43,8 +43,8 @@ class HomeInspectionExtractionPipeline:
     def __init__(self, 
                  mock_mode: bool = False, 
                  api_keys: Optional[Dict[str, str]] = None,
-                 enable_claude_fallback: bool = True,
-                 confidence_threshold: float = 70.0):
+                 enable_claude_fallback: bool = False,
+                 confidence_threshold: float = 50.0):
         """
         Initialize the extraction pipeline.
         
