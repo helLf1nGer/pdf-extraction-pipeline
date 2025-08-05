@@ -55,8 +55,8 @@ class ExtractionPromptTemplate:
   1. Ensure all strings are properly quoted with double quotes (")
   2. Escape any quotes inside string values with backslash (\")
   3. Use proper commas between array elements and object properties
-  4. Do not include trailing commas before closing brackets ] or braces }
-  5. Ensure all brackets [ ] and braces { } are properly paired and closed
+  4. Do not include trailing commas before closing brackets ] or braces {{}}
+  5. Ensure all brackets [ ] and braces {{}} are properly paired and closed
   6. Keep string values on single lines - use \n for line breaks if needed
   
   IMPORTANT: Always check for and include these common summary recommendations if present:

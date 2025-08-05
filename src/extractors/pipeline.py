@@ -24,6 +24,16 @@ from .gemini_extractor import GeminiExtractor, GeminiExtractionError
 from .claude_extractor import ClaudeExtractor, ClaudeExtractionError
 from .mock_services import MockExtractionPipeline
 
+# Import JSON cleaner at the module level
+try:
+    from .json_cleaner import JSONCleaner
+    HAS_JSON_CLEANER = True
+except ImportError:
+    # Fallback if json_cleaner is not available
+    HAS_JSON_CLEANER = False
+    logger = logging.getLogger(__name__)
+    logger.warning("JSONCleaner not available, image integration will be skipped")
+
 logger = logging.getLogger(__name__)
 
 
@@ -324,10 +334,28 @@ class HomeInspectionExtractionPipeline:
                 filename = result.report.source_pdf or "unknown"
                 base_name = Path(filename).stem
                 
+                # Convert to dict for processing
+                report_dict = result.report.dict()
+                
+                # Clean and integrate images if cleaner is available
+                if HAS_JSON_CLEANER:
+                    try:
+                        cleaner = JSONCleaner(confidence_threshold=5.0, max_images_per_issue=3)
+                        cleaned_data = cleaner.clean_extraction_output(report_dict)
+                        
+                        # Log integration stats if available
+                        if 'metadata' in cleaned_data and 'image_integration_stats' in cleaned_data['metadata']:
+                            stats = cleaned_data['metadata']['image_integration_stats']
+                            logger.info(f"Image integration: {stats['issues_with_images']}/{stats['total_issues']} issues have images")
+                        
+                        report_dict = cleaned_data
+                    except Exception as e:
+                        logger.warning(f"JSON cleaning failed, using original data: {str(e)}")
+                
                 # Save as JSON
                 json_file = output_path / f"{base_name}_extracted.json"
                 with open(json_file, 'w', encoding='utf-8') as f:
-                    json.dump(result.report.dict(), f, indent=2, ensure_ascii=False)
+                    json.dump(report_dict, f, indent=2, ensure_ascii=False)
                 
                 logger.info(f"Saved extraction results to {json_file}")
             
