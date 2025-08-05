@@ -1,0 +1,534 @@
+{
+  "report_name": "YOUR INSPECTION REPORT - 443 Madison St Toronto, ON",
+  "issues": [
+    {
+      "issue_name": "Improper Notches or Holes in Floor Joists",
+      "issue_type": "Structural",
+      "issue_description": "Condition: Notches or holes in floor joists. Previous repairs noted. Implication: Weakened structure. This was also noted as 'Joists are notched and weakened'. Task: Repair.",
+      "issue_summary": "Floor joists have been improperly notched or drilled, which has weakened the structure. A specialist should repair the joists to ensure structural integrity.",
+      "severity": "high",
+      "location": "West",
+      "issue_images": [],
+      "enhanced_images": [
+        {
+          "image_path": "outputs/images/3/page_08_image_008.png",
+          "expected_location": {
+            "page_number": 8,
+            "location_description": "center of page",
+            "section_context": "Diagram showing joist notching and drilling guidelines"
+          },
+          "actual_page": 8,
+          "confidence_score": 70.0,
+          "matching_method": "location_based",
+          "location_match": true
+        },
+        {
+          "image_path": "outputs/images/3/page_07_image_003.png",
+          "expected_location": {
+            "page_number": 8,
+            "location_description": "center of page",
+            "section_context": "Diagram showing joist notching and drilling guidelines"
+          },
+          "actual_page": 7,
+          "confidence_score": 7.0,
+          "matching_method": "location_based",
+          "location_match": false
+        },
+        {
+          "image_path": "outputs/images/3/page_07_image_007.png",
+          "expected_location": {
+            "page_number": 8,
+            "location_description": "center of page",
+            "section_context": "Diagram showing joist notching and drilling guidelines"
+          },
+          "actual_page": 7,
+          "confidence_score": 7.0,
+          "matching_method": "location_based",
+          "location_match": false
+        },
+        {
+          "image_path": "outputs/images/3/page_09_image_006.png",
+          "expected_location": {
+            "page_number": 9,
+            "location_description": "top area",
+            "section_context": "Image 5 showing notched joists"
+          },
+          "actual_page": 9,
+          "confidence_score": 70.0,
+          "matching_method": "location_based",
+          "location_match": true
+        },
+        {
+          "image_path": "outputs/images/3/page_08_image_008.png",
+          "expected_location": {
+            "page_number": 9,
+            "location_description": "top area",
+            "section_context": "Image 5 showing notched joists"
+          },
+          "actual_page": 8,
+          "confidence_score": 7.0,
+          "matching_method": "location_based",
+          "location_match": false
+        },
+        {
+          "image_path": "outputs/images/3/page_10_image_008.png",
+          "expected_location": {
+            "page_number": 9,
+            "location_description": "top area",
+            "section_context": "Image 5 showing notched joists"
+          },
+          "actual_page": 10,
+          "confidence_score": 7.0,
+          "matching_method": "location_based",
+          "location_match": false
+        }
+      ],
+      "expected_image_locations": [
+        {
+          "page_number": 8,
+          "location_description": "center of page",
+          "section_context": "Diagram showing joist notching and drilling guidelines"
+        },
+        {
+          "page_number": 9,
+          "location_description": "top area",
+          "section_context": "Image 5 showing notched joists"
+        }
+      ]
+    },
+    {
+      "issue_name": "Rust and Water in Electrical Distribution Panel",
+      "issue_type": "Electrical",
+      "issue_description": "Condition: Rust or water in distribution panel. This was also noted as 'Water and rust in bottom of panel'. Implications: Electric shock, Fire hazard. Task: Replace.",
+      "issue_summary": "Water intrusion has caused rust in the main electrical panel, creating a severe fire and shock hazard. The panel should be replaced by a qualified electrician.",
+      "severity": "high",
+      "location": "North Basement",
+      "issue_images": [],
+      "enhanced_images": [
+        {
+          "image_path": "outputs/images/3/page_12_image_005.png",
+          "expected_location": {
+            "page_number": 12,
+            "location_description": "center of page",
+            "section_context": "Diagram showing potential water entry points"
+          },
+          "actual_page": 12,
+          "confidence_score": 70.0,
+          "matching_method": "location_based",
+          "location_match": true
+        },
+        {
+          "image_path": "outputs/images/3/page_13_image_007.png",
+          "expected_location": {
+            "page_number": 12,
+            "location_description": "center of page",
+            "section_context": "Diagram showing potential water entry points"
+          },
+          "actual_page": 13,
+          "confidence_score": 7.0,
+          "matching_method": "location_based",
+          "location_match": false
+        },
+        {
+          "image_path": "outputs/images/3/page_10_image_008.png",
+          "expected_location": {
+            "page_number": 12,
+            "location_description": "center of page",
+            "section_context": "Diagram showing potential water entry points"
+          },
+          "actual_page": 10,
+          "confidence_score": 4.0,
+          "matching_method": "location_based",
+          "location_match": false
+        }
+      ],
+      "expected_image_locations": [
+        {
+          "page_number": 12,
+          "location_description": "center of page",
+          "section_context": "Diagram showing potential water entry points"
+        }
+      ]
+    },
+    {
+      "issue_name": "Missing Kickout Flashing",
+      "issue_type": "Roofing",
+      "issue_description": "Condition: Kickout flashing - missing at the roof/sidewall junction. Implication(s): Chance of water damage to structure, finishes and contents. Task: Improve.",
+      "issue_summary": "Kickout flashing is missing where the roof meets a sidewall, increasing the risk of water damage to the structure. Flashing should be installed to properly direct water away from the wall.",
+      "severity": "high",
+      "location": "North First Floor",
+      "issue_images": [],
+      "enhanced_images": [
+        {
+          "image_path": "outputs/images/3/page_03_image_002.png",
+          "expected_location": {
+            "page_number": 3,
+            "location_description": "center of page",
+            "section_context": "Diagram illustrating proper kickout flashing installation"
+          },
+          "actual_page": 3,
+          "confidence_score": 70.0,
+          "matching_method": "location_based",
+          "location_match": true
+        },
+        {
+          "image_path": "outputs/images/3/page_04_image_012.png",
+          "expected_location": {
+            "page_number": 3,
+            "location_description": "center of page",
+            "section_context": "Diagram illustrating proper kickout flashing installation"
+          },
+          "actual_page": 4,
+          "confidence_score": 7.0,
+          "matching_method": "location_based",
+          "location_match": false
+        },
+        {
+          "image_path": "outputs/images/3/page_04_image_014.png",
+          "expected_location": {
+            "page_number": 3,
+            "location_description": "center of page",
+            "section_context": "Diagram illustrating proper kickout flashing installation"
+          },
+          "actual_page": 4,
+          "confidence_score": 7.0,
+          "matching_method": "location_based",
+          "location_match": false
+        },
+        {
+          "image_path": "outputs/images/3/page_04_image_012.png",
+          "expected_location": {
+            "page_number": 4,
+            "location_description": "top area",
+            "section_context": "Image showing the missing kickout flashing"
+          },
+          "actual_page": 4,
+          "confidence_score": 70.0,
+          "matching_method": "location_based",
+          "location_match": true
+        },
+        {
+          "image_path": "outputs/images/3/page_04_image_014.png",
+          "expected_location": {
+            "page_number": 4,
+            "location_description": "top area",
+            "section_context": "Image showing the missing kickout flashing"
+          },
+          "actual_page": 4,
+          "confidence_score": 70.0,
+          "matching_method": "location_based",
+          "location_match": true
+        },
+        {
+          "image_path": "outputs/images/3/page_03_image_002.png",
+          "expected_location": {
+            "page_number": 4,
+            "location_description": "top area",
+            "section_context": "Image showing the missing kickout flashing"
+          },
+          "actual_page": 3,
+          "confidence_score": 7.0,
+          "matching_method": "location_based",
+          "location_match": false
+        }
+      ],
+      "expected_image_locations": [
+        {
+          "page_number": 3,
+          "location_description": "center of page",
+          "section_context": "Diagram illustrating proper kickout flashing installation"
+        },
+        {
+          "page_number": 4,
+          "location_description": "top area",
+          "section_context": "Image showing the missing kickout flashing"
+        }
+      ]
+    },
+    {
+      "issue_name": "Leaking Roof Pipe/Stack Flashing",
+      "issue_type": "Roofing",
+      "issue_description": "SLOPED ROOF FLASHINGS \\ Pipe/stack flashings. Condition: Leak. Implication(s): Chance of water damage to structure, finishes and contents. Task: Repair.",
+      "issue_summary": "The flashing around a pipe or stack on the roof is leaking, which can cause significant water damage. The flashing should be repaired by a qualified roofer to prevent further leaks.",
+      "severity": "high",
+      "location": "North",
+      "issue_images": [],
+      "enhanced_images": [
+        {
+          "image_path": "outputs/images/3/page_04_image_012.png",
+          "expected_location": {
+            "page_number": 4,
+            "location_description": "center of page",
+            "section_context": "Image showing evidence of a leak in the roof"
+          },
+          "actual_page": 4,
+          "confidence_score": 70.0,
+          "matching_method": "location_based",
+          "location_match": true
+        },
+        {
+          "image_path": "outputs/images/3/page_04_image_014.png",
+          "expected_location": {
+            "page_number": 4,
+            "location_description": "center of page",
+            "section_context": "Image showing evidence of a leak in the roof"
+          },
+          "actual_page": 4,
+          "confidence_score": 70.0,
+          "matching_method": "location_based",
+          "location_match": true
+        },
+        {
+          "image_path": "outputs/images/3/page_03_image_002.png",
+          "expected_location": {
+            "page_number": 4,
+            "location_description": "center of page",
+            "section_context": "Image showing evidence of a leak in the roof"
+          },
+          "actual_page": 3,
+          "confidence_score": 7.0,
+          "matching_method": "location_based",
+          "location_match": false
+        }
+      ],
+      "expected_image_locations": [
+        {
+          "page_number": 4,
+          "location_description": "center of page",
+          "section_context": "Image showing evidence of a leak in the roof"
+        }
+      ]
+    },
+    {
+      "issue_name": "Annual Roof Inspection and Tune-Up Recommended",
+      "issue_type": "Roofing",
+      "issue_description": "Roofs may leak at anytime. Leaks often appear at roof penetrations, flashings, changes in direction or changes in material. A roof leak should be addressed promptly to avoid damage to the structure, interior finishes and furnishings. We recommend an annual inspection and tune-up to minimize the risk of leakage and to maximize the life of roofs.",
+      "issue_summary": "The inspector recommends an annual roof inspection and tune-up as a preventative measure to minimize the risk of leaks and maximize the roof's lifespan.",
+      "severity": "low",
+      "location": "General",
+      "issue_images": [],
+      "enhanced_images": [],
+      "expected_image_locations": []
+    },
+    {
+      "issue_name": "Downspout Discharges Too Close to Foundation",
+      "issue_type": "Exterior",
+      "issue_description": "ROOF DRAINAGE \\ Downspouts. Condition: Discharge too close to building. The downspout should be extended to discharge at least 6 feet from the home. Implication(s): Chance of water damage to structure, finishes and contents. Task: Improve.",
+      "issue_summary": "A downspout discharges water too close to the foundation, increasing the risk of water damage and basement leaks. The downspout should be extended to discharge at least 6 feet away from the house.",
+      "severity": "medium",
+      "location": "East Exterior Wall",
+      "issue_images": [],
+      "enhanced_images": [
+        {
+          "image_path": "outputs/images/3/page_04_image_012.png",
+          "expected_location": {
+            "page_number": 5,
+            "location_description": "center of page",
+            "section_context": "Diagram illustrating the problem of a downspout discharging too close to the house"
+          },
+          "actual_page": 4,
+          "confidence_score": 7.0,
+          "matching_method": "location_based",
+          "location_match": false
+        },
+        {
+          "image_path": "outputs/images/3/page_04_image_014.png",
+          "expected_location": {
+            "page_number": 5,
+            "location_description": "center of page",
+            "section_context": "Diagram illustrating the problem of a downspout discharging too close to the house"
+          },
+          "actual_page": 4,
+          "confidence_score": 7.0,
+          "matching_method": "location_based",
+          "location_match": false
+        },
+        {
+          "image_path": "outputs/images/3/page_06_image_002.png",
+          "expected_location": {
+            "page_number": 5,
+            "location_description": "center of page",
+            "section_context": "Diagram illustrating the problem of a downspout discharging too close to the house"
+          },
+          "actual_page": 6,
+          "confidence_score": 7.0,
+          "matching_method": "location_based",
+          "location_match": false
+        }
+      ],
+      "expected_image_locations": [
+        {
+          "page_number": 5,
+          "location_description": "center of page",
+          "section_context": "Diagram illustrating the problem of a downspout discharging too close to the house"
+        }
+      ]
+    },
+    {
+      "issue_name": "Insufficient Number of Downspouts",
+      "issue_type": "Exterior",
+      "issue_description": "Condition: Too few downspouts. More downspouts will help reduce the risk of basement flooding. A good rule of thumb is that there should be a downspout for every 35 feet of gutter. Implication(s): Chance of water damage to structure, finishes and contents. Task: Provide.",
+      "issue_summary": "There are not enough downspouts for the length of the gutters, which can lead to overflows and increase the risk of basement flooding. Additional downspouts should be installed.",
+      "severity": "medium",
+      "location": "Various",
+      "issue_images": [],
+      "enhanced_images": [],
+      "expected_image_locations": []
+    },
+    {
+      "issue_name": "Improperly Secured Deck Joist Hangers",
+      "issue_type": "Structural",
+      "issue_description": "PORCHES, DECKS, STAIRS, PATIOS AND BALCONIES \\ Joists. Condition: Fastener problems. Joist hangers for wood deck are not properly secured. Implication(s): Weakened structure | Chance of movement. Task: Improve.",
+      "issue_summary": "The joist hangers supporting the wood deck are not properly secured, weakening the structure and creating a safety hazard. The fasteners should be corrected by a qualified professional.",
+      "severity": "high",
+      "location": "North Exterior Wall",
+      "issue_images": [],
+      "enhanced_images": [
+        {
+          "image_path": "outputs/images/3/page_07_image_003.png",
+          "expected_location": {
+            "page_number": 7,
+            "location_description": "center of page",
+            "section_context": "Image labeled '4. Poor end bearing, joist hanger connections'"
+          },
+          "actual_page": 7,
+          "confidence_score": 70.0,
+          "matching_method": "location_based",
+          "location_match": true
+        },
+        {
+          "image_path": "outputs/images/3/page_07_image_007.png",
+          "expected_location": {
+            "page_number": 7,
+            "location_description": "center of page",
+            "section_context": "Image labeled '4. Poor end bearing, joist hanger connections'"
+          },
+          "actual_page": 7,
+          "confidence_score": 70.0,
+          "matching_method": "location_based",
+          "location_match": true
+        },
+        {
+          "image_path": "outputs/images/3/page_06_image_002.png",
+          "expected_location": {
+            "page_number": 7,
+            "location_description": "center of page",
+            "section_context": "Image labeled '4. Poor end bearing, joist hanger connections'"
+          },
+          "actual_page": 6,
+          "confidence_score": 7.0,
+          "matching_method": "location_based",
+          "location_match": false
+        }
+      ],
+      "expected_image_locations": [
+        {
+          "page_number": 7,
+          "location_description": "center of page",
+          "section_context": "Image labeled '4. Poor end bearing, joist hanger connections'"
+        }
+      ]
+    },
+    {
+      "issue_name": "Split Roof Rafter/Truss",
+      "issue_type": "Structural",
+      "issue_description": "ROOF FRAMING \\ Rafters/trusses. Condition: Split. Truss repairs must be designed by an engineer. Implication(s): Weakened structure | Chance of structural movement. Task: Repair.",
+      "issue_summary": "A roof truss in the attic is split, compromising the roof structure. This is a significant structural defect that requires repair designed by a qualified engineer.",
+      "severity": "high",
+      "location": "North Attic",
+      "issue_images": [],
+      "enhanced_images": [
+        {
+          "image_path": "outputs/images/3/page_09_image_006.png",
+          "expected_location": {
+            "page_number": 9,
+            "location_description": "bottom area",
+            "section_context": "Image 6 depicting a split top chord of a truss"
+          },
+          "actual_page": 9,
+          "confidence_score": 70.0,
+          "matching_method": "location_based",
+          "location_match": true
+        },
+        {
+          "image_path": "outputs/images/3/page_08_image_008.png",
+          "expected_location": {
+            "page_number": 9,
+            "location_description": "bottom area",
+            "section_context": "Image 6 depicting a split top chord of a truss"
+          },
+          "actual_page": 8,
+          "confidence_score": 7.0,
+          "matching_method": "location_based",
+          "location_match": false
+        },
+        {
+          "image_path": "outputs/images/3/page_10_image_008.png",
+          "expected_location": {
+            "page_number": 9,
+            "location_description": "bottom area",
+            "section_context": "Image 6 depicting a split top chord of a truss"
+          },
+          "actual_page": 10,
+          "confidence_score": 7.0,
+          "matching_method": "location_based",
+          "location_match": false
+        }
+      ],
+      "expected_image_locations": [
+        {
+          "page_number": 9,
+          "location_description": "bottom area",
+          "section_context": "Image 6 depicting a split top chord of a truss"
+        }
+      ]
+    },
+    {
+      "issue_name": "Abandoned Electrical Wire",
+      "issue_type": "Electrical",
+      "issue_description": "Condition: Abandoned wire. Implication(s): Electric shock. Task: Improve.",
+      "issue_summary": "An abandoned electrical wire was found in the furnace room, which poses an electric shock hazard. The wire should be properly terminated or removed by a qualified electrician.",
+      "severity": "medium",
+      "location": "Basement Furnace Room",
+      "issue_images": [],
+      "enhanced_images": [],
+      "expected_image_locations": []
+    },
+    {
+      "issue_name": "Wiring Too Close to Edge of Studs/Joists",
+      "issue_type": "Electrical",
+      "issue_description": "Condition: Too close to edge of studs or joists. Implication(s): Electric shock, Fire hazard. Task: Improve.",
+      "issue_summary": "Electrical wiring is installed too close to the edge of framing members, making it vulnerable to damage from fasteners and creating a fire and shock hazard. The wiring should be repositioned or protected.",
+      "severity": "high",
+      "location": "Basement Furnace Room",
+      "issue_images": [],
+      "enhanced_images": [],
+      "expected_image_locations": []
+    },
+    {
+      "issue_name": "Loose Light Fixture",
+      "issue_type": "Electrical",
+      "issue_description": "Condition: Loose. Implication(s): Electric shock, Fire hazard. Task: Repair or replace. Also noted as 'Light fixture is not well secured'.",
+      "issue_summary": "An exterior light fixture is loose, creating a potential fire and electric shock hazard. The fixture should be properly secured or replaced.",
+      "severity": "medium",
+      "location": "East Exterior Wall",
+      "issue_images": [],
+      "enhanced_images": [],
+      "expected_image_locations": []
+    },
+    {
+      "issue_name": "Annual Heating System Maintenance Recommended",
+      "issue_type": "Hvac",
+      "issue_description": "No description available",
+      "issue_summary": "No summary available",
+      "severity": "medium",
+      "location": null,
+      "issue_images": [],
+      "enhanced_images": [],
+      "expected_image_locations": []
+    }
+  ],
+  "source_pdf": "3.pdf",
+  "extraction_model": "gemini-2.5-pro",
+  "total_pages": null
+}

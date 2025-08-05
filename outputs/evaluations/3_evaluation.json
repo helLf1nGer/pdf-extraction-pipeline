@@ -1,0 +1,42 @@
+{
+  "timestamp": "2025-08-05T14:30:25.330695",
+  "pdf_analysis": {
+    "estimated_issues": 10,
+    "total_images": 317,
+    "text_length": 19527,
+    "issue_indicators_found": 70
+  },
+  "extraction_analysis": {
+    "extracted_issues": 13,
+    "issues_with_images": 7,
+    "total_integrated_images": 20,
+    "total_enhanced_images": 27,
+    "high_confidence_images": 11,
+    "effective_extracted_images": 20,
+    "image_coverage": "7/13 issues have images",
+    "report_name": "YOUR INSPECTION REPORT - 443 Madison St Toronto, ON",
+    "has_report_name": true,
+    "has_integration_stats": true
+  },
+  "accuracy_metrics": {
+    "issue_count_accuracy": 100,
+    "content_quality_score": 100.0,
+    "image_extraction_accuracy": 58.7,
+    "overall_accuracy": 91.7,
+    "passes_85_threshold": true
+  },
+  "summary": "Overall accuracy: 91.7%. Estimated 10 issues in PDF, extracted 13. Image integration: 7/13 issues have images (20 total). High-confidence images: 11. PASSES 85% threshold.",
+  "findings": {
+    "strengths": [
+      "Report name correctly extracted",
+      "Successfully extracted 13 issues",
+      "High content quality with complete issue descriptions"
+    ],
+    "weaknesses": [
+      "Moderate image coverage - 7/13 issues have images"
+    ],
+    "recommendations": [
+      "Enhance image matching confidence scoring"
+    ]
+  }
+}

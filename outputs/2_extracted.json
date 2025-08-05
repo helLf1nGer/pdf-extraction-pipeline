@@ -1,11 +1,11 @@
 {
-  "report_name": "EMPIRE HOME INSPECTIONS - Your Street, Sample, ON",
+  "report_name": "EMPIRE HOME INSPECTIONS",
   "issues": [
     {
       "issue_name": "Use Qualified Specialists for Repairs",
       "issue_type": "General",
-      "issue_description": "All recommendations should be addressed by qualified specialists. This is a general recommendation to ensure that any repairs or corrections identified in the report are handled by professionals with the appropriate expertise.",
-      "issue_summary": "It is recommended that all repairs and corrections identified in this report be performed by qualified specialists to ensure proper and safe execution.",
+      "issue_description": "All recommendations should be addressed by qualified specialists.",
+      "issue_summary": "The report advises that all identified issues and recommended repairs should be handled by qualified specialists to ensure they are addressed correctly and safely.",
       "severity": "low",
       "location": "General",
       "issue_images": [],
@@ -15,8 +15,8 @@
     {
       "issue_name": "Obtain Required Permits for Renovations",
       "issue_type": "General",
-      "issue_description": "Homeowners should obtain required permits before starting renovations. This ensures that any work performed complies with local building codes and regulations.",
-      "issue_summary": "Before beginning any renovations, homeowners should ensure they obtain all necessary permits from the local authorities.",
+      "issue_description": "Homeowners should obtain required permits before starting renovations.",
+      "issue_summary": "It is recommended that homeowners obtain all necessary permits from local authorities before beginning any renovation work to ensure compliance with building codes.",
       "severity": "low",
       "location": "General",
       "issue_images": [],
@@ -26,8 +26,8 @@
     {
       "issue_name": "WETT Inspection for Wood-Burning Appliances",
       "issue_type": "Safety",
-      "issue_description": "Wood-burning appliances should be inspected by a WETT-certified technician before use. This is a crucial safety measure to prevent fire hazards and ensure proper operation.",
-      "issue_summary": "A WETT-certified technician should inspect any wood-burning appliances before they are used to ensure they are safe and compliant.",
+      "issue_description": "Wood-burning appliances should be inspected by a WETT-certified technician before use.",
+      "issue_summary": "For safety, any wood-burning appliances in the home should be inspected by a WETT-certified technician prior to being used.",
       "severity": "medium",
       "location": "General",
       "issue_images": [],
@@ -37,321 +37,278 @@
     {
       "issue_name": "Oversized Breaker and Double-Tapped Wire",
       "issue_type": "Electrical",
-      "issue_description": "A qualified electrician should further evaluate the breaker size compared to the gauge of wire. For example, there is a 40-amp breaker powering a 10-gauge wire. This breaker is also \"double-tapped\" with an 8-gauge stranded wire, which is generally not permitted. Implication(s): Equipment overheating | Fire hazard. Task: Further evaluation. Time: Immediate.",
-      "issue_summary": "A 40-amp breaker is improperly connected to a smaller 10-gauge wire and is also double-tapped, creating a significant fire hazard. This requires immediate evaluation and correction by a qualified electrician.",
+      "issue_description": "Condition: Fuses or breakers too big. A qualified electrician should further evaluate the breaker size compared to the gauge of wire. For example, there is a 40-amp breaker powering a 10-gauge wire. This breaker is also \"double-tapped\" with an 8-gauge stranded wire, which is generally not permitted. Implication(s): Equipment overheating | Fire hazard. Task: Further evaluation. Time: Immediate.",
+      "issue_summary": "An electrical panel has an oversized 40-amp breaker on a 10-gauge wire and an improper 'double-tap'. This is a fire hazard and requires immediate evaluation by a qualified electrician.",
       "severity": "high",
       "location": "Electrical panel in basement",
-      "issue_images": [],
+      "issue_images": [
+        "outputs/images/2/page_08_image_001.png",
+        "outputs/images/2/page_07_image_001.png",
+        "outputs/images/2/page_09_image_001.png"
+      ],
       "enhanced_images": [
         {
           "image_path": "outputs/images/2/page_08_image_001.png",
           "expected_location": {
             "page_number": 8,
-            "location_description": "bottom right area",
-            "section_context": "ELECTRICAL section, showing the breaker issue with caption 'Breaker too big, Double taps'"
+            "location_description": "bottom of page",
+            "section_context": "Electrical section, showing the oversized and double-tapped breaker"
           },
           "actual_page": 8,
           "confidence_score": 70.0,
           "matching_method": "location_based",
-          "location_match": true
+          "location_match": true,
+          "selected": true
         },
         {
           "image_path": "outputs/images/2/page_07_image_001.png",
           "expected_location": {
             "page_number": 8,
-            "location_description": "bottom right area",
-            "section_context": "ELECTRICAL section, showing the breaker issue with caption 'Breaker too big, Double taps'"
+            "location_description": "bottom of page",
+            "section_context": "Electrical section, showing the oversized and double-tapped breaker"
           },
           "actual_page": 7,
           "confidence_score": 7.0,
           "matching_method": "location_based",
-          "location_match": false
+          "location_match": false,
+          "selected": true
         },
         {
           "image_path": "outputs/images/2/page_09_image_001.png",
           "expected_location": {
             "page_number": 8,
-            "location_description": "bottom right area",
-            "section_context": "ELECTRICAL section, showing the breaker issue with caption 'Breaker too big, Double taps'"
+            "location_description": "bottom of page",
+            "section_context": "Electrical section, showing the oversized and double-tapped breaker"
           },
           "actual_page": 9,
           "confidence_score": 7.0,
           "matching_method": "location_based",
-          "location_match": false
-        }
-      ],
-      "expected_image_locations": [
-        {
-          "page_number": 8,
-          "location_description": "bottom right area",
-          "section_context": "ELECTRICAL section, showing the breaker issue with caption 'Breaker too big, Double taps'"
+          "location_match": false,
+          "selected": true
         }
       ]
     },
     {
       "issue_name": "Inoperative Gas Fireplace with Incomplete Venting",
       "issue_type": "Hvac",
-      "issue_description": "The exhaust vent installation for the gas fireplace is incomplete, which will allow hazardous combustion gases into the home if used. This can be a life safety issue. A technician needs to evaluate the installation compared to the manufacturer's installation requirements and make corrections before the fireplace can be safely used. Task: Correct. Time: Before use.",
-      "issue_summary": "The basement gas fireplace has an incomplete exhaust vent, posing a life safety hazard from combustion gases. A technician must correct the installation before it can be used.",
+      "issue_description": "Condition: Inoperative. The exhaust vent installation for the gas fireplace is incomplete, which will allow hazardous combustion gases into the home if used. This can be a life safety issue. A technician needs to evaluate the installation compared to the manufacturer's installation requirements and make corrections before the fireplace can be safely used. Task: Correct. Time: Before use.",
+      "issue_summary": "The basement gas fireplace is inoperative due to an incomplete exhaust vent, which poses a life safety risk from combustion gases. It must be corrected by a qualified technician before use.",
       "severity": "high",
       "location": "Basement",
-      "issue_images": [],
+      "issue_images": [
+        "outputs/images/2/page_09_image_001.png",
+        "outputs/images/2/page_09_image_002.png",
+        "outputs/images/2/page_11_image_001.png"
+      ],
       "enhanced_images": [
-        {
-          "image_path": "outputs/images/2/page_11_image_001.png",
-          "expected_location": {
-            "page_number": 11,
-            "location_description": "bottom area",
-            "section_context": "HEATING section, showing two images of the inoperative gas fireplace installation"
-          },
-          "actual_page": 11,
-          "confidence_score": 70.0,
-          "matching_method": "location_based",
-          "location_match": true
-        },
-        {
-          "image_path": "outputs/images/2/page_11_image_002.png",
-          "expected_location": {
-            "page_number": 11,
-            "location_description": "bottom area",
-            "section_context": "HEATING section, showing two images of the inoperative gas fireplace installation"
-          },
-          "actual_page": 11,
-          "confidence_score": 70.0,
-          "matching_method": "location_based",
-          "location_match": true
-        },
         {
           "image_path": "outputs/images/2/page_09_image_001.png",
           "expected_location": {
-            "page_number": 11,
-            "location_description": "bottom area",
-            "section_context": "HEATING section, showing two images of the inoperative gas fireplace installation"
+            "page_number": 10,
+            "location_description": "bottom of page",
+            "section_context": "Heating section, showing the inoperative gas fireplace and incomplete vent"
           },
           "actual_page": 9,
-          "confidence_score": 4.0,
+          "confidence_score": 7.0,
           "matching_method": "location_based",
-          "location_match": false
-        }
-      ],
-      "expected_image_locations": [
+          "location_match": false,
+          "selected": true
+        },
         {
-          "page_number": 11,
-          "location_description": "bottom area",
-          "section_context": "HEATING section, showing two images of the inoperative gas fireplace installation"
+          "image_path": "outputs/images/2/page_09_image_002.png",
+          "expected_location": {
+            "page_number": 10,
+            "location_description": "bottom of page",
+            "section_context": "Heating section, showing the inoperative gas fireplace and incomplete vent"
+          },
+          "actual_page": 9,
+          "confidence_score": 7.0,
+          "matching_method": "location_based",
+          "location_match": false,
+          "selected": true
+        },
+        {
+          "image_path": "outputs/images/2/page_11_image_001.png",
+          "expected_location": {
+            "page_number": 10,
+            "location_description": "bottom of page",
+            "section_context": "Heating section, showing the inoperative gas fireplace and incomplete vent"
+          },
+          "actual_page": 11,
+          "confidence_score": 7.0,
+          "matching_method": "location_based",
+          "location_match": false,
+          "selected": true
         }
       ]
     },
     {
-      "issue_name": "Missing, Loose, or Torn Shingles",
-      "issue_type": "Roofing",
-      "issue_description": "Condition: Missing, loose or torn. Implication(s): Chance of water damage to structure, finishes and contents. Task: Repair. Time: As soon as possible.",
-      "issue_summary": "The asphalt shingle roof has missing, loose, or torn shingles, which could lead to water damage. Repair is needed as soon as possible.",
-      "severity": "high",
+      "issue_name": "Missing, Loose or Torn Shingles",
+      "issue_type": "Exterior",
+      "issue_description": "Sloped roofing material: Asphalt shingles. Condition: Missing, loose or torn. Implication(s): Chance of water damage to structure, finishes and contents. Location: Roof. Task: Repair. Time: As soon as possible.",
+      "issue_summary": "Asphalt shingles on the roof are missing, loose, or torn, which could lead to water damage. Repair is recommended as soon as possible to prevent leaks.",
+      "severity": "medium",
       "location": "Roof",
-      "issue_images": [],
+      "issue_images": [
+        "outputs/images/2/page_04_image_001.png"
+      ],
       "enhanced_images": [
         {
           "image_path": "outputs/images/2/page_04_image_001.png",
           "expected_location": {
             "page_number": 3,
-            "location_description": "bottom area",
-            "section_context": "ROOFING section, showing an image of the missing/torn shingle(s)"
+            "location_description": "center of page",
+            "section_context": "Roofing section, showing missing/torn shingle(s)"
           },
           "actual_page": 4,
           "confidence_score": 7.0,
           "matching_method": "location_based",
-          "location_match": false
+          "location_match": false,
+          "selected": true
         },
         {
           "image_path": "outputs/images/2/page_01_image_001.png",
           "expected_location": {
             "page_number": 3,
-            "location_description": "bottom area",
-            "section_context": "ROOFING section, showing an image of the missing/torn shingle(s)"
+            "location_description": "center of page",
+            "section_context": "Roofing section, showing missing/torn shingle(s)"
           },
           "actual_page": 1,
           "confidence_score": 4.0,
           "matching_method": "location_based",
-          "location_match": false
+          "location_match": false,
+          "selected": false
         },
         {
           "image_path": "outputs/images/2/page_01_image_002.png",
           "expected_location": {
             "page_number": 3,
-            "location_description": "bottom area",
-            "section_context": "ROOFING section, showing an image of the missing/torn shingle(s)"
+            "location_description": "center of page",
+            "section_context": "Roofing section, showing missing/torn shingle(s)"
           },
           "actual_page": 1,
           "confidence_score": 4.0,
           "matching_method": "location_based",
-          "location_match": false
-        }
-      ],
-      "expected_image_locations": [
-        {
-          "page_number": 3,
-          "location_description": "bottom area",
-          "section_context": "ROOFING section, showing an image of the missing/torn shingle(s)"
+          "location_match": false,
+          "selected": false
         }
       ]
     },
     {
       "issue_name": "Missing Window Well",
       "issue_type": "Exterior",
-      "issue_description": "This window is at grade level. To reduce the potential for damage, a window well should be installed. Efforts should be made to keep water/snow away from the window until corrections are made. A window well cover can be a temporary proactive measure. Implication(s): Chance of water damage to structure, finishes and contents | Material deterioration. Task: Correct - Install window well. Time: As soon as reasonably practical.",
-      "issue_summary": "A window at grade level is missing a window well, increasing the risk of water damage and material deterioration. A window well should be installed.",
+      "issue_description": "Condition: Missing. This window is at grade level. To reduce the potential for damage, a window well should be installed. Efforts should be made to keep water/snow away from the window until corrections are made. A window well cover can be a temporary proactive measure. Implication(s): Chance of water damage to structure, finishes and contents | Material deterioration. Location: Exterior. Task: Correct - Install window well. Time: As soon as reasonably practical.",
+      "issue_summary": "A window at grade level is missing a window well, increasing the risk of water damage and material deterioration. A window well should be installed to protect the window and foundation.",
       "severity": "medium",
       "location": "Exterior",
-      "issue_images": [],
+      "issue_images": [
+        "outputs/images/2/page_04_image_001.png",
+        "outputs/images/2/page_05_image_001.png",
+        "outputs/images/2/page_05_image_002.png"
+      ],
       "enhanced_images": [
         {
           "image_path": "outputs/images/2/page_04_image_001.png",
           "expected_location": {
             "page_number": 4,
             "location_description": "center of page",
-            "section_context": "EXTERIOR section, showing a diagram of a window well installation"
+            "section_context": "Exterior section, diagram showing a window well installation"
           },
           "actual_page": 4,
           "confidence_score": 70.0,
           "matching_method": "location_based",
-          "location_match": true
+          "location_match": true,
+          "selected": true
         },
         {
           "image_path": "outputs/images/2/page_05_image_001.png",
           "expected_location": {
             "page_number": 4,
             "location_description": "center of page",
-            "section_context": "EXTERIOR section, showing a diagram of a window well installation"
+            "section_context": "Exterior section, diagram showing a window well installation"
           },
           "actual_page": 5,
           "confidence_score": 7.0,
           "matching_method": "location_based",
-          "location_match": false
+          "location_match": false,
+          "selected": true
         },
         {
           "image_path": "outputs/images/2/page_05_image_002.png",
           "expected_location": {
             "page_number": 4,
             "location_description": "center of page",
-            "section_context": "EXTERIOR section, showing a diagram of a window well installation"
+            "section_context": "Exterior section, diagram showing a window well installation"
           },
           "actual_page": 5,
           "confidence_score": 7.0,
           "matching_method": "location_based",
-          "location_match": false
-        }
-      ],
-      "expected_image_locations": [
-        {
-          "page_number": 4,
-          "location_description": "center of page",
-          "section_context": "EXTERIOR section, showing a diagram of a window well installation"
+          "location_match": false,
+          "selected": true
         }
       ]
     },
     {
       "issue_name": "Improperly Notched Floor Joist",
       "issue_type": "Structural",
-      "issue_description": "A joist has been notched to accommodate the bathtub plumbing trap. A bathtub can have significant weight when filled with water. A qualified contractor should advise on the appropriate repair method to re-support the joist. Implication(s): Weakened structure. Task: Repair. Time: As soon as possible.",
-      "issue_summary": "A floor joist in the basement has been improperly notched for plumbing, weakening the structure. A qualified contractor should repair it as soon as possible.",
-      "severity": "high",
+      "issue_description": "Condition: Notches or holes. A joist has been notched to accommodate the bathtub plumbing trap. A bathtub can have significant weight when filled with water. A qualified contractor should advise on the appropriate repair method to re-support the joist. Implication(s): Weakened structure. Location: Basement. Task: Repair. Time: As soon as possible.",
+      "issue_summary": "A floor joist in the basement has been improperly notched for plumbing, weakening the structure. A qualified contractor should repair the joist to provide proper support.",
+      "severity": "medium",
       "location": "Basement",
-      "issue_images": [],
+      "issue_images": [
+        "outputs/images/2/page_05_image_001.png",
+        "outputs/images/2/page_05_image_002.png",
+        "outputs/images/2/page_07_image_001.png"
+      ],
       "enhanced_images": [
         {
           "image_path": "outputs/images/2/page_05_image_001.png",
           "expected_location": {
             "page_number": 6,
-            "location_description": "bottom area",
-            "section_context": "STRUCTURE section, showing a diagram of joist notching guidelines"
+            "location_description": "center of page",
+            "section_context": "Structure section, diagram showing joist notching guidelines"
           },
           "actual_page": 5,
           "confidence_score": 7.0,
           "matching_method": "location_based",
-          "location_match": false
+          "location_match": false,
+          "selected": true
         },
         {
           "image_path": "outputs/images/2/page_05_image_002.png",
           "expected_location": {
             "page_number": 6,
-            "location_description": "bottom area",
-            "section_context": "STRUCTURE section, showing a diagram of joist notching guidelines"
+            "location_description": "center of page",
+            "section_context": "Structure section, diagram showing joist notching guidelines"
           },
           "actual_page": 5,
           "confidence_score": 7.0,
           "matching_method": "location_based",
-          "location_match": false
+          "location_match": false,
+          "selected": true
         },
         {
           "image_path": "outputs/images/2/page_07_image_001.png",
           "expected_location": {
             "page_number": 6,
-            "location_description": "bottom area",
-            "section_context": "STRUCTURE section, showing a diagram of joist notching guidelines"
+            "location_description": "center of page",
+            "section_context": "Structure section, diagram showing joist notching guidelines"
           },
           "actual_page": 7,
           "confidence_score": 7.0,
           "matching_method": "location_based",
-          "location_match": false
-        },
-        {
-          "image_path": "outputs/images/2/page_07_image_001.png",
-          "expected_location": {
-            "page_number": 7,
-            "location_description": "top area",
-            "section_context": "STRUCTURE section, showing a photo of the actual notched joist"
-          },
-          "actual_page": 7,
-          "confidence_score": 70.0,
-          "matching_method": "location_based",
-          "location_match": true
-        },
-        {
-          "image_path": "outputs/images/2/page_08_image_001.png",
-          "expected_location": {
-            "page_number": 7,
-            "location_description": "top area",
-            "section_context": "STRUCTURE section, showing a photo of the actual notched joist"
-          },
-          "actual_page": 8,
-          "confidence_score": 7.0,
-          "matching_method": "location_based",
-          "location_match": false
-        },
-        {
-          "image_path": "outputs/images/2/page_05_image_001.png",
-          "expected_location": {
-            "page_number": 7,
-            "location_description": "top area",
-            "section_context": "STRUCTURE section, showing a photo of the actual notched joist"
-          },
-          "actual_page": 5,
-          "confidence_score": 4.0,
-          "matching_method": "location_based",
-          "location_match": false
-        }
-      ],
-      "expected_image_locations": [
-        {
-          "page_number": 6,
-          "location_description": "bottom area",
-          "section_context": "STRUCTURE section, showing a diagram of joist notching guidelines"
-        },
-        {
-          "page_number": 7,
-          "location_description": "top area",
-          "section_context": "STRUCTURE section, showing a photo of the actual notched joist"
+          "location_match": false,
+          "selected": true
         }
       ]
     },
     {
-      "issue_name": "Annual HVAC Maintenance Recommended",
+      "issue_name": "Annual HVAC Maintenance Program Recommended",
       "issue_type": "Hvac",
       "issue_description": "An annual maintenance program is recommended for heating and cooling systems to optimize safety, efficiency, comfort, and durability.",
-      "issue_summary": "An annual maintenance program is recommended for the heating and cooling systems to ensure optimal performance, safety, and longevity.",
+      "issue_summary": "An annual maintenance program for the heating and cooling systems is recommended to ensure optimal performance, safety, and longevity.",
       "severity": "low",
-      "location": "General",
+      "location": "Heating and cooling systems",
       "issue_images": [],
       "enhanced_images": [],
       "expected_image_locations": []
@@ -359,8 +316,8 @@
     {
       "issue_name": "Insufficient Attic Insulation",
       "issue_type": "Insulation & Ventilation",
-      "issue_description": "The attic insulation is lower than current standards. The approximate attic/roof insulation amount/value is R-20. Increasing insulation is considered a discretionary improvement that may improve comfort and lower energy bills. Check eligibility for home efficiency rebates. Implication: Increased heating and cooling costs. Task: Improve. Time: Discretionary.",
-      "issue_summary": "The attic has R-20 insulation, which is below current standards. Adding more insulation is a discretionary improvement that could lower energy costs.",
+      "issue_description": "Condition: Amount less than current standards. The attic insulation is lower than current standards. Increasing insulation is considered a discretionary improvement that may improve comfort and lower energy bills. Check eligibility for home efficiency rebates. Implication: Increased heating and cooling costs. Location: Attic. Task: Improve. Time: Discretionary.",
+      "issue_summary": "The attic insulation (R-20) is below current standards, which can lead to higher energy costs. Improving the insulation is a discretionary upgrade that could improve comfort and efficiency.",
       "severity": "low",
       "location": "Attic",
       "issue_images": [],
@@ -368,72 +325,122 @@
       "expected_image_locations": []
     },
     {
-      "issue_name": "Non-Standard Plumbing Trap (S-Trap)",
+      "issue_name": "Non-Standard Plumbing Trap Installation",
       "issue_type": "Plumbing",
-      "issue_description": "Residential traps should be P-type. The current waste plumbing installation (including the dishwasher connection downstream of the trap) should be evaluated by a qualified plumber and corrected. Monitor for odors that may indicate siphoning allowing sewer gases to enter the home. Implication(s): Reduced operability | Fixtures slow to drain. Task: Correct. Time: As soon as reasonably practical.",
-      "issue_summary": "The kitchen sink has a non-standard (S-type) trap which can lead to siphoning and sewer gas entry. A qualified plumber should evaluate and correct the installation.",
+      "issue_description": "Condition: Nonstandard shape or material. Residential traps should be P-type. The current waste plumbing installation (including the dishwasher connection downstream of the trap) should be evaluated by a qualified plumber and corrected. Monitor for odors that may indicate siphoning allowing sewer gases to enter the home. Implication(s): Reduced operability | Fixtures slow to drain. Location: Kitchen. Task: Correct. Time: As soon as reasonably practical.",
+      "issue_summary": "The kitchen sink has a non-standard plumbing trap (likely an S-trap) which can cause slow draining and allow sewer gas to enter. It should be evaluated and corrected by a qualified plumber.",
       "severity": "medium",
       "location": "Kitchen",
-      "issue_images": [],
+      "issue_images": [
+        "outputs/images/2/page_13_image_001.png",
+        "outputs/images/2/page_14_image_001.png"
+      ],
       "enhanced_images": [
         {
           "image_path": "outputs/images/2/page_13_image_001.png",
           "expected_location": {
             "page_number": 13,
-            "location_description": "bottom area",
-            "section_context": "PLUMBING section, showing an illustration of an S-trap"
+            "location_description": "center of page",
+            "section_context": "Plumbing section, illustration of an S-trap"
           },
           "actual_page": 13,
           "confidence_score": 70.0,
           "matching_method": "location_based",
-          "location_match": true
+          "location_match": true,
+          "selected": true
         },
         {
           "image_path": "outputs/images/2/page_14_image_001.png",
           "expected_location": {
             "page_number": 13,
-            "location_description": "bottom area",
-            "section_context": "PLUMBING section, showing an illustration of an S-trap"
+            "location_description": "center of page",
+            "section_context": "Plumbing section, illustration of an S-trap"
           },
           "actual_page": 14,
           "confidence_score": 7.0,
           "matching_method": "location_based",
-          "location_match": false
+          "location_match": false,
+          "selected": true
         },
         {
           "image_path": "outputs/images/2/page_11_image_001.png",
           "expected_location": {
             "page_number": 13,
-            "location_description": "bottom area",
-            "section_context": "PLUMBING section, showing an illustration of an S-trap"
+            "location_description": "center of page",
+            "section_context": "Plumbing section, illustration of an S-trap"
           },
           "actual_page": 11,
           "confidence_score": 4.0,
           "matching_method": "location_based",
-          "location_match": false
-        }
-      ],
-      "expected_image_locations": [
-        {
-          "page_number": 13,
-          "location_description": "bottom area",
-          "section_context": "PLUMBING section, showing an illustration of an S-trap"
+          "location_match": false,
+          "selected": false
         }
       ]
     },
     {
       "issue_name": "Water Stains on Ceiling",
       "issue_type": "Interior",
-      "issue_description": "The stain was checked with a moisture meter after running water in the bathroom above and did not have elevated levels at the time of the inspection. After repairs (i.e. painting) are completed, inspect the area periodically for any changes. Implication(s): Chance of water damage to structure, finishes and contents. Task: Repair, Monitor for future correction. Time: Ongoing (periodically following repairs).",
-      "issue_summary": "A water stain was found on the living room ceiling. It was dry at the time of inspection, but the area should be repaired and then monitored for any recurrence.",
-      "severity": "medium",
+      "issue_description": "Condition: Water stains. The stain was checked with a moisture meter after running water in the bathroom above and did not have elevated levels at the time of the inspection. After repairs (i.e. painting) are completed, inspect the area periodically for any changes. Implication(s): Chance of water damage to structure, finishes and contents. Location: Living Room. Task: Repair, Monitor for future correction. Time: Ongoing (periodically following repairs).",
+      "issue_summary": "There are water stains on the living room ceiling. While dry at the time of inspection, the area should be repaired (painted) and monitored for any future moisture or changes.",
+      "severity": "low",
       "location": "Living Room",
-      "issue_images": [],
-      "enhanced_images": [],
-      "expected_image_locations": []
+      "issue_images": [
+        "outputs/images/2/page_15_image_001.png",
+        "outputs/images/2/page_14_image_001.png",
+        "outputs/images/2/page_16_image_001.png"
+      ],
+      "enhanced_images": [
+        {
+          "image_path": "outputs/images/2/page_15_image_001.png",
+          "expected_location": {
+            "page_number": 15,
+            "location_description": "center of page",
+            "section_context": "Interior section, showing the ceiling stain"
+          },
+          "actual_page": 15,
+          "confidence_score": 70.0,
+          "matching_method": "location_based",
+          "location_match": true,
+          "selected": true
+        },
+        {
+          "image_path": "outputs/images/2/page_14_image_001.png",
+          "expected_location": {
+            "page_number": 15,
+            "location_description": "center of page",
+            "section_context": "Interior section, showing the ceiling stain"
+          },
+          "actual_page": 14,
+          "confidence_score": 7.0,
+          "matching_method": "location_based",
+          "location_match": false,
+          "selected": true
+        },
+        {
+          "image_path": "outputs/images/2/page_16_image_001.png",
+          "expected_location": {
+            "page_number": 15,
+            "location_description": "center of page",
+            "section_context": "Interior section, showing the ceiling stain"
+          },
+          "actual_page": 16,
+          "confidence_score": 7.0,
+          "matching_method": "location_based",
+          "location_match": false,
+          "selected": true
+        }
+      ]
     }
   ],
   "source_pdf": "2.pdf",
   "extraction_model": "gemini-2.5-pro",
-  "total_pages": null
+  "total_pages": null,
+  "metadata": {
+    "image_integration_stats": {
+      "total_issues": 12,
+      "issues_with_images": 7,
+      "total_images_integrated": 18,
+      "high_confidence_images": 4
+    }
+  }
 }

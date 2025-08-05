@@ -1,0 +1,42 @@
+{
+  "timestamp": "2025-08-05T13:56:41.319752",
+  "pdf_analysis": {
+    "estimated_issues": 10,
+    "total_images": 207,
+    "text_length": 15949,
+    "issue_indicators_found": 57
+  },
+  "extraction_analysis": {
+    "extracted_issues": 12,
+    "issues_with_images": 7,
+    "total_integrated_images": 18,
+    "total_enhanced_images": 21,
+    "high_confidence_images": 4,
+    "effective_extracted_images": 18,
+    "image_coverage": "7/12 issues have images",
+    "report_name": "EMPIRE HOME INSPECTIONS",
+    "has_report_name": true,
+    "has_integration_stats": true
+  },
+  "accuracy_metrics": {
+    "issue_count_accuracy": 100,
+    "content_quality_score": 100.0,
+    "image_extraction_accuracy": 55.3,
+    "overall_accuracy": 91.1,
+    "passes_85_threshold": true
+  },
+  "summary": "Overall accuracy: 91.1%. Estimated 10 issues in PDF, extracted 12. Image integration: 7/12 issues have images (18 total). High-confidence images: 4. PASSES 85% threshold.",
+  "findings": {
+    "strengths": [
+      "Report name correctly extracted",
+      "Successfully extracted 12 issues",
+      "High content quality with complete issue descriptions"
+    ],
+    "weaknesses": [
+      "Moderate image coverage - 7/12 issues have images"
+    ],
+    "recommendations": [
+      "Enhance image matching confidence scoring"
+    ]
+  }
+}
